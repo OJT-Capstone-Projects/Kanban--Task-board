@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskFlow — Kanban Board</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="header" id="main-header">
+    <div class="header-inner">
+
+      <div class="header-brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-table-columns"></i>
+        </div>
+        <span class="brand-name">TaskFlow</span>
+      </div>
+
+      <div class="header-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search-input" placeholder="Search tasks..." autocomplete="off" />
+      </div>
+
+      <div class="header-right">
+        <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">
+          <i class="fa-solid fa-moon" id="theme-icon"></i>
+        </button>
+        <button class="btn-new-task" id="header-add-btn">
+          <i class="fa-solid fa-plus"></i> New Task
+        </button>
+        <div class="user-avatar" title="Abhishek Y.">AY</div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ── PAGE ── -->
+  <div class="page">
+
+    <!-- Page heading -->
+    <div class="page-heading">
+      <div>
+        <h1 class="page-title">Project Board</h1>
+        <p class="page-sub">Manage your tasks across all stages</p>
+      </div>
+      <div class="page-stats">
+        <div class="pstat">
+          <span class="pstat-num" id="total-count">0</span>
+          <span class="pstat-label">Total</span>
+        </div>
+        <div class="pstat-divider"></div>
+        <div class="pstat">
+          <span class="pstat-num green" id="hstat-done">0</span>
+          <span class="pstat-label">Done</span>
+        </div>
+        <div class="pstat-divider"></div>
+        <div class="pstat">
+          <span class="pstat-num amber" id="hstat-active">0</span>
+          <span class="pstat-label">Active</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats row -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <i class="fa-solid fa-layer-group stat-icon"></i>
+        <div>
+          <p class="stat-val" id="stat-total">0</p>
+          <p class="stat-lbl">Total Tasks</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="fa-regular fa-clipboard stat-icon blue"></i>
+        <div>
+          <p class="stat-val" id="stat-todo">0</p>
+          <p class="stat-lbl">To Do</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="fa-solid fa-rotate stat-icon amber"></i>
+        <div>
+          <p class="stat-val" id="stat-inprogress">0</p>
+          <p class="stat-lbl">In Progress</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="fa-solid fa-circle-check stat-icon green"></i>
+        <div>
+          <p class="stat-val" id="stat-done">0</p>
+          <p class="stat-lbl">Completed</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create task panel -->
+    <section class="create-panel" id="creation-section">
+      <div class="create-inner">
+        <div class="create-header">
+          <div class="create-header-left">
+            <i class="fa-solid fa-plus-circle create-header-icon"></i>
+            <div>
+              <p class="create-title">New Task</p>
+              <p class="create-sub">Add a task to the To Do column</p>
+            </div>
+          </div>
+          <button class="icon-btn" id="creation-close-btn" title="Close">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="create-form">
+          <div class="form-row">
+            <div class="form-group full">
+              <label class="form-label">Task Title</label>
+              <input type="text" id="task-title-input" class="form-input"
+                placeholder="What needs to be done?" maxlength="80" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group full">
+              <label class="form-label">Description <span class="form-optional">(optional)</span></label>
+              <textarea id="task-desc-input" class="form-input form-textarea"
+                placeholder="Add some details..." rows="2" maxlength="300"></textarea>
+            </div>
+          </div>
+          <div class="form-row three-col">
+            <div class="form-group">
+              <label class="form-label">Priority</label>
+              <select id="task-priority-input" class="form-input form-select">
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Due Date</label>
+              <input type="date" id="task-due-input" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Assignee</label>
+              <input type="text" id="task-assignee-input" class="form-input"
+                placeholder="Name" maxlength="30" />
+            </div>
+          </div>
+          <div class="create-actions">
+            <button id="add-task-btn" class="btn-primary">
+              <i class="fa-solid fa-plus"></i> Create Task
+            </button>
+            <button id="clear-form-btn" class="btn-ghost">Reset</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Board -->
+    <div class="board-bar">
+      <span class="board-bar-title">
+        <i class="fa-solid fa-grip-vertical"></i> Board
+      </span>
+      <span class="board-bar-hint">Drag cards between columns</span>
+    </div>
+
+    <main class="board" id="board-section">
+
+      <!-- To Do -->
+      <div class="column" id="col-todo" data-column="todo">
+        <div class="col-head">
+          <div class="col-head-left">
+            <span class="col-dot dot-blue"></span>
+            <span class="col-title">To Do</span>
+          </div>
+          <span class="col-count" id="count-todo">0</span>
+        </div>
+        <div class="card-list" id="list-todo" data-column="todo"></div>
+        <div class="empty-state" id="empty-todo">
+          <i class="fa-regular fa-clipboard empty-icon"></i>
+          <p class="empty-title">No tasks here</p>
+          <p class="empty-hint">Click New Task to get started</p>
+        </div>
+      </div>
+
+      <!-- In Progress -->
+      <div class="column" id="col-inprogress" data-column="inprogress">
+        <div class="col-head">
+          <div class="col-head-left">
+            <span class="col-dot dot-amber"></span>
+            <span class="col-title">In Progress</span>
+          </div>
+          <span class="col-count" id="count-inprogress">0</span>
+        </div>
+        <div class="card-list" id="list-inprogress" data-column="inprogress"></div>
+        <div class="empty-state" id="empty-inprogress">
+          <i class="fa-solid fa-gear empty-icon"></i>
+          <p class="empty-title">Nothing in progress</p>
+          <p class="empty-hint">Drag a card here to start</p>
+        </div>
+      </div>
+
+      <!-- Done -->
+      <div class="column" id="col-done" data-column="done">
+        <div class="col-head">
+          <div class="col-head-left">
+            <span class="col-dot dot-green"></span>
+            <span class="col-title">Done</span>
+          </div>
+          <span class="col-count" id="count-done">0</span>
+        </div>
+        <div class="card-list" id="list-done" data-column="done"></div>
+        <div class="empty-state" id="empty-done">
+          <i class="fa-solid fa-circle-check empty-icon"></i>
+          <p class="empty-title">Nothing completed yet</p>
+          <p class="empty-hint">Finish a task to see it here</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="footer-inner">
+
+      <div class="footer-brand">
+        <div class="footer-logo"><i class="fa-solid fa-table-columns"></i></div>
+        <div>
+          <p class="footer-name">TaskFlow</p>
+          <p class="footer-tagline">Simple task management</p>
+        </div>
+      </div>
+
+      <div class="footer-links-group">
+        <p class="footer-group-title">Quick Links</p>
+        <ul class="footer-links">
+          <li><a href="#" class="footer-link">Dashboard</a></li>
+          <li><a href="#" class="footer-link">My Tasks</a></li>
+          <li><a href="#" class="footer-link">Reports</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links-group">
+        <p class="footer-group-title">Team</p>
+        <ul class="footer-links">
+          <li><a href="#" class="footer-link">Members</a></li>
+          <li><a href="#" class="footer-link">Workspaces</a></li>
+          <li><a href="#" class="footer-link">Settings</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links-group">
+        <p class="footer-group-title">Support</p>
+        <ul class="footer-links">
+          <li><a href="#" class="footer-link">Documentation</a></li>
+          <li><a href="#" class="footer-link">Contact Us</a></li>
+          <li><a href="#" class="footer-link">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links-group">
+        <p class="footer-group-title">Follow Us</p>
+        <div class="footer-socials">
+          <a href="#" class="social-link" title="GitHub"><i class="fa-brands fa-github"></i></a>
+          <a href="#" class="social-link" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="#" class="social-link" title="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+      </div>
+
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 TaskFlow. All rights reserved.</p>
+      <p>Made with <i class="fa-solid fa-heart" style="color:#6366f1"></i> for productivity</p>
+    </div>
+  </footer>
+
+  <!-- ── EDIT MODAL ── -->
+  <div id="edit-modal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-head">
+        <p class="modal-title">Edit Task</p>
+        <button class="icon-btn" id="modal-close-x"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input type="text" id="edit-title-input" class="form-input" placeholder="Task title..." maxlength="80" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea id="edit-desc-input" class="form-input form-textarea" placeholder="Description..." rows="3" maxlength="300"></textarea>
+        </div>
+        <div class="form-row three-col">
+          <div class="form-group">
+            <label class="form-label">Priority</label>
+            <select id="edit-priority-input" class="form-input form-select">
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Due Date</label>
+            <input type="date" id="edit-due-input" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Assignee</label>
+            <input type="text" id="edit-assignee-input" class="form-input" placeholder="Name" maxlength="30" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button id="modal-save-btn" class="btn-primary">
+          <i class="fa-solid fa-check"></i> Save Changes
+        </button>
+        <button id="modal-cancel-btn" class="btn-ghost">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TOAST ── -->
+  <div id="toast" class="toast"></div>
+
+  <script src="ui.js"></script>
+</body>
+</html>
